@@ -68,10 +68,10 @@ var o = {foo: 'foo'}
 _.has(o, 'foo') // true
 
 // Post data to parent thread
-self.postMessage({foo: 'foo'}) 
+self.postMessage({foo: 'foo'})
 
 // Respond to message from parent thread
-self.addEventListener('message', function(event){ console.log(event); });  
+self.addEventListener('message', function(event){ console.log(event); });
 ```
 
 You can even use ES6 modules if you have the babel-loader configured:
@@ -85,10 +85,24 @@ let o = {foo: 'foo'}
 _.has(o, 'foo') // true
 
 // Post data to parent thread
-self.postMessage({foo: 'foo'}) 
+self.postMessage({foo: 'foo'})
 
 // Respond to message from parent thread
 self.addEventListener('message', (event) => { console.log(event); });
+```
+
+## Shared Workers
+
+Note: Shared workers cannot use the `inline` option. `require('worker?shared&inline!./worker')` the `inline` here is ignored.
+
+``` javascript
+// main.js
+var MyWorker = require("worker?shared!./worker.js");
+var worker = new MyWorker("name"); //if no name parameter is supplied, it will default to "untitled" in chrome
+worker.port.onmessage = function(event) {
+  ...
+};
+worker.port.postMessage("blah");
 ```
 
 <h2 align="center">Maintainers</h2>

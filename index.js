@@ -7,6 +7,7 @@ const loaderUtils = require('loader-utils');
 
 const getWorker = (file, content, query) => {
   const workerPublicPath = `__webpack_public_path__ + ${JSON.stringify(file)}`;
+  if (query.shared) return `new SharedWorker(${workerPublicPath})`;
   if (query.inline) {
     const createInlineWorkerPath = JSON.stringify(`!!${path.join(__dirname, 'createInlineWorker.js')}`);
     const fallbackWorkerPath = query.fallback === false ? 'null' : workerPublicPath;
