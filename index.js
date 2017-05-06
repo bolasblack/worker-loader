@@ -7,13 +7,12 @@ const loaderUtils = require('loader-utils');
 
 const getWorker = (file, content, query) => {
   const workerPublicPath = `__webpack_public_path__ + ${JSON.stringify(file)}`;
-  if (query.shared) return `new SharedWorker(${workerPublicPath})`;
   if (query.inline) {
     const createInlineWorkerPath = JSON.stringify(`!!${path.join(__dirname, 'createInlineWorker.js')}`);
     const fallbackWorkerPath = query.fallback === false ? 'null' : workerPublicPath;
     return `require(${createInlineWorkerPath})(${JSON.stringify(content)}, ${fallbackWorkerPath})`;
   }
-  return `new Worker(${workerPublicPath})`;
+  return `opts && opts.shared ? new SharedWorker(${workerPublicPath}) : new Worker(${workerPublicPath})`;
 };
 
 module.exports = function workerLoader() {};
@@ -60,7 +59,7 @@ module.exports.pitch = function pitch(request) {
       if (query.fallback === false) {
         delete this._compilation.assets[workerFile];
       }
-      return callback(null, `module.exports = function() {\n\treturn ${workerFactory};\n};`);
+      return callback(null, `module.exports = function(opts) {\n\treturn ${workerFactory};\n};`);
     }
     return callback(null, null);
   });

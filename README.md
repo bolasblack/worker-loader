@@ -32,6 +32,7 @@ Import the worker file:
 var MyWorker = require("worker-loader!./file.js");
 
 var worker = new MyWorker();
+// var worker = new MyWorker({ shared: true }); // initialize as SharedWorker
 worker.postMessage({a: 1});
 worker.onmessage = function(event) {...};
 worker.addEventListener("message", function(event) {...});
@@ -89,20 +90,6 @@ self.postMessage({foo: 'foo'})
 
 // Respond to message from parent thread
 self.addEventListener('message', (event) => { console.log(event); });
-```
-
-## Shared Workers
-
-Note: Shared workers cannot use the `inline` option. `require('worker?shared&inline!./worker')` the `inline` here is ignored.
-
-``` javascript
-// main.js
-var MyWorker = require("worker?shared!./worker.js");
-var worker = new MyWorker("name"); //if no name parameter is supplied, it will default to "untitled" in chrome
-worker.port.onmessage = function(event) {
-  ...
-};
-worker.port.postMessage("blah");
 ```
 
 <h2 align="center">Maintainers</h2>
