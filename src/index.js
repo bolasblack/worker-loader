@@ -108,7 +108,7 @@ export function pitch(request) {
 
       return cb(
         null,
-        `module.exports = function() {\n  return ${worker.factory};\n};`
+        `module.exports = function(opts) {\n  return ${worker.factory};\n};`
       );
     }
 

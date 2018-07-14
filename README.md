@@ -55,6 +55,7 @@ import Worker from 'worker-loader!./Worker.js';
 import Worker from './file.worker.js';
 
 const worker = new Worker();
+// const worker = new Worker({ shared: true }); // initialize as SharedWorker
 
 worker.postMessage({ a: 1 });
 worker.onmessage = function (event) {};
